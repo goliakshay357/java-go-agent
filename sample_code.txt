@@ -1,0 +1,157 @@
+"""
+Sample code file containing controllers, services, and repositories.
+This is used to test the code_segregator.py script.
+"""
+
+Controller
+***
+class UserController:
+    def __init__(self, user_service):
+        self.user_service = user_service
+    
+    def get_user(self, user_id):
+        """Get a user by ID."""
+        return self.user_service.get_user(user_id)
+    
+    def create_user(self, user_data):
+        """Create a new user."""
+        return self.user_service.create_user(user_data)
+    
+    def update_user(self, user_id, user_data):
+        """Update an existing user."""
+        return self.user_service.update_user(user_id, user_data)
+    
+    def delete_user(self, user_id):
+        """Delete a user."""
+        return self.user_service.delete_user(user_id)
+***
+
+# Another controller
+def product_controller(product_service):
+    """Product controller function."""
+    
+    def get_product(product_id):
+        return product_service.get_product(product_id)
+    
+    def list_products():
+        return product_service.list_products()
+    
+    return {
+        "get_product": get_product,
+        "list_products": list_products
+    }
+
+# Service
+class UserService:
+    def __init__(self, user_repository):
+        self.user_repository = user_repository
+    
+    def get_user(self, user_id):
+        """Get a user by ID."""
+        return self.user_repository.find_by_id(user_id)
+    
+    def create_user(self, user_data):
+        """Create a new user."""
+        # Validate user data
+        if not user_data.get("username"):
+            raise ValueError("Username is required")
+        
+        # Create user
+        return self.user_repository.create(user_data)
+    
+    def update_user(self, user_id, user_data):
+        """Update an existing user."""
+        # Check if user exists
+        user = self.user_repository.find_by_id(user_id)
+        if not user:
+            raise ValueError(f"User with ID {user_id} not found")
+        
+        # Update user
+        return self.user_repository.update(user_id, user_data)
+    
+    def delete_user(self, user_id):
+        """Delete a user."""
+        # Check if user exists
+        user = self.user_repository.find_by_id(user_id)
+        if not user:
+            raise ValueError(f"User with ID {user_id} not found")
+        
+        # Delete user
+        return self.user_repository.delete(user_id)
+
+# Another service
+def product_service(product_repository):
+    """Product service function."""
+    
+    def get_product(product_id):
+        return product_repository.find_by_id(product_id)
+    
+    def list_products():
+        return product_repository.find_all()
+    
+    return {
+        "get_product": get_product,
+        "list_products": list_products
+    }
+
+# Repository
+class UserRepository:
+    def __init__(self, db_connection):
+        self.db_connection = db_connection
+    
+    def find_by_id(self, user_id):
+        """Find a user by ID."""
+        # In a real implementation, this would query a database
+        return {"id": user_id, "username": f"user_{user_id}"}
+    
+    def create(self, user_data):
+        """Create a new user."""
+        # In a real implementation, this would insert into a database
+        user_id = 123  # Generated ID
+        return {"id": user_id, **user_data}
+    
+    def update(self, user_id, user_data):
+        """Update an existing user."""
+        # In a real implementation, this would update a database record
+        return {"id": user_id, **user_data}
+    
+    def delete(self, user_id):
+        """Delete a user."""
+        # In a real implementation, this would delete from a database
+        return {"id": user_id, "deleted": True}
+
+# Another repository
+def product_repository(db_connection):
+    """Product repository function."""
+    
+    def find_by_id(product_id):
+        # In a real implementation, this would query a database
+        return {"id": product_id, "name": f"Product {product_id}"}
+    
+    def find_all():
+        # In a real implementation, this would query a database
+        return [
+            {"id": 1, "name": "Product 1"},
+            {"id": 2, "name": "Product 2"},
+            {"id": 3, "name": "Product 3"}
+        ]
+    
+    return {
+        "find_by_id": find_by_id,
+        "find_all": find_all
+    }
+
+# Utility function (not part of CSR)
+def validate_email(email):
+    """Validate an email address."""
+    import re
+    pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+    return bool(re.match(pattern, email))
+
+# Another utility function (not part of CSR)
+def generate_password(length=12):
+    """Generate a random password."""
+    import random
+    import string
+    characters = string.ascii_letters + string.digits + string.punctuation
+    return ''.join(random.choice(characters) for _ in range(length)) 

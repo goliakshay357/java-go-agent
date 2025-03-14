@@ -1,0 +1,7 @@
+# Core dependencies
+typing-extensions>=4.0.0
+
+# Optional dependencies for advanced features
+langchain>=0.1.0  # For advanced AI agent capabilities
+langchain-openai>=0.0.1  # For OpenAI integration
+langchain-anthropic>=0.0.1  # For Anthropic integration 
