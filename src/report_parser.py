@@ -3,6 +3,7 @@ import os
 from typing import Dict, List, Optional, Tuple
 from agents.controller_agent import ControllerAgent
 from agents.service_agent import ServiceAgent
+from agents.repository_agent import RepositoryAgent
 
 class ReportsParser:
     def __init__(self, file_path: str):
@@ -26,8 +27,10 @@ class ReportsParser:
         """
         # self.controller_prompt = self.controller_parser(content)
         # print(self.controller_prompt)
-        self.service_prompt = self.service_parser(content)
-        print(self.service_prompt)
+        # self.service_prompt = self.service_parser(content)
+        # print(self.service_prompt)
+        self.repo_prompt = self.repo_parser(content)
+        print(self.repo_prompt)
 
     def controller_parser(self, content: str):
         """
@@ -73,7 +76,9 @@ class ReportsParser:
         repo_start = content.find("repository\n***") + len("repository\n***")
         repo_end = content.find("\n***", repo_start)
         repo_code = content[repo_start:repo_end].strip()
-        return repo_code
+        repo_agent = RepositoryAgent()
+        repo_prompt = repo_agent.prompt(repo_code)
+        return repo_prompt
     
     def other_parser(self, content: str):
         """
