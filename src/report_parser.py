@@ -47,7 +47,7 @@ class ReportsParser:
             else:
                 controller_code = content[controller_start:controller_end].strip()
             controller_agent = ControllerAgent()
-            controller_prompt = controller_agent.process_controller_code(controller_code)
+            controller_prompt = controller_agent.prompt(controller_code)
             return controller_prompt
         except Exception as e:
             print(f"Error parsing controller section: {e}")
