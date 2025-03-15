@@ -2,7 +2,7 @@ import re
 import os
 from typing import Dict, List, Optional, Tuple
 from agents.controller_agent import ControllerAgent
-
+from agents.service_agent import ServiceAgent
 
 class ReportsParser:
     def __init__(self, file_path: str):
@@ -24,8 +24,10 @@ class ReportsParser:
         """
         Parse the reports from the content.
         """
-        self.controller_prompt = self.controller_parser(content)
-        print(self.controller_prompt)
+        # self.controller_prompt = self.controller_parser(content)
+        # print(self.controller_prompt)
+        self.service_prompt = self.service_parser(content)
+        print(self.service_prompt)
 
     def controller_parser(self, content: str):
         """
@@ -60,8 +62,10 @@ class ReportsParser:
         service_start = content.find("service\n***") + len("service\n***")
         service_end = content.find("\n***", service_start)
         service_code = content[service_start:service_end].strip()
-        return service_code
-    
+        service_agent = ServiceAgent()
+        service_prompt = service_agent.prompt(service_code)
+        return service_prompt
+
     def repo_parser(self, content: str):
         """
         Parse the repo from the content.
